@@ -1,0 +1,17 @@
+@import "https://fonts.cdnfonts.com/css/sega-logo-font";
+
+body {
+  background: linear-gradient(
+    to right,
+    hsl(224, 84%, 17%),
+    hsl(180, 100%, 25%) /* hsl(0, 10%, 90%), */ /* hsl(0, 10%, 70%) */
+  );
+}
+
+h1 {
+  font-family: "SEGA LOGO FONT", sans-serif;
+  font-weight: 200;
+  /* color: #0ccac4; */
+  color: hsl(178, 89%, 42%);
+  /* color: hsl(10, 89%, 35%); */
+}

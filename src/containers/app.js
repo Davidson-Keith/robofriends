@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import CardList from "../components/cardList";
 import SearchBox from "../components/searchBox";
 import Scroll from "../components/scroll";
 import ErrorBoundary from "../components/errorBoundary";
 import "./app.css";
-// import { robots } from "../db/robotsDB";
+import {robots} from "../db/robotsDB";
 
 class App extends Component {
   constructor() {
@@ -17,17 +17,27 @@ class App extends Component {
 
   componentDidMount() {
     fetch("https://jsonplaceholder.typicode.com/users")
-      .then((Response) => Response.json()) // Promise, when fullfilled is array of objects
-      .then((users) => this.setState({ robots: users })); // the array of objects
+      .then((response) => {
+        if (response.ok) {
+          return response.json()
+        }
+        return Promise.reject(response);
+      }) // Promise, when fullfilled is array of objects
+      .then((users) => this.setState({robots: users})) // the array of objects
+      .catch((response) => {
+        console.log("Error fetching robots:", response.status, response.statusText);
+        console.log("Using backup robot DB instead.")
+        this.setState({robots: robots});
+      });
     // .then((users) => {});
   }
 
   onSearchChange = (event) => {
-    this.setState({ searchField: event.target.value });
+    this.setState({searchField: event.target.value});
   };
 
   render() {
-    const { robots, searchField } = this.state;
+    const {robots, searchField} = this.state;
     const filteredRobots = robots.filter((robot) => {
       return robot.name.toLowerCase().includes(searchField.toLowerCase());
     });
@@ -37,7 +47,7 @@ class App extends Component {
       return (
         <div className="tc">
           <h1 className="f1">RoboFriends</h1>
-          <SearchBox searchChange={this.onSearchChange} />
+          <SearchBox searchChange={this.onSearchChange}/>
           <Scroll
             style={{
               overflowY: "scroll",
@@ -46,7 +56,7 @@ class App extends Component {
             }}
           >
             <ErrorBoundary>
-              <CardList robots={filteredRobots} />
+              <CardList robots={filteredRobots}/>
             </ErrorBoundary>
           </Scroll>
         </div>
